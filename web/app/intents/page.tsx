@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import useSWR from 'swr';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 async function getJSON<T>(path: string): Promise<T> {
   const r = await fetch(path, { cache: 'no-store' });
@@ -20,7 +21,8 @@ export default function IntentsPage() {
   if (asset) qs.set('asset', asset);
   if (owner) qs.set('owner', owner);
 
-  const { data, isLoading, error } = useSWR(`/api/intents?${qs.toString()}`, getJSON, { refreshInterval: 5000 });
+  const { data, isLoading, error } = useSWR<any>(`/api/intents?${qs.toString()}`, getJSON, { refreshInterval: 5000 });
+  const { data: volume } = useSWR<any>('/api/metrics/intents', getJSON, { refreshInterval: 30000 });
 
   return (
     <main className="space-y-4">
@@ -56,6 +58,22 @@ export default function IntentsPage() {
           </tbody>
         </table>
       </div>
+
+      {volume?.items && (
+        <div className="bg-slate-900 rounded-2xl p-4">
+          <div className="text-slate-300 font-medium mb-2">Intent Volume</div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={volume.items}>
+                <XAxis dataKey="date" stroke="#94a3b8" />
+                <YAxis stroke="#94a3b8" allowDecimals={false} />
+                <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none' }} />
+                <Bar dataKey="count" fill="#818cf8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center justify-between">
         <button className="px-3 py-2 bg-slate-800 rounded-lg disabled:opacity-40" onClick={()=>setPage(p=>Math.max(0, p-1))} disabled={page===0}>Prev</button>
