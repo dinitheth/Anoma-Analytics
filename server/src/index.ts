@@ -5,6 +5,7 @@ import { intents } from './routes/intents';
 import { solvers } from './routes/solvers';
 import { status } from './routes/status';
 import { logs } from './routes/logs';
+import { metrics } from './routes/metrics';
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ app.use('/api/intents', intents);
 app.use('/api/solvers', solvers);
 app.use('/api/status', status);
 app.use('/api/logs', logs);
+app.use('/api/metrics', metrics);
 
 app.listen(env.PORT, () => {
   console.log(`API listening on :${env.PORT}`);
