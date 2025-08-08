@@ -8,7 +8,7 @@ async function getJSON<T>(path: string): Promise<T> {
 }
 
 export default function SolversPage() {
-  const { data, error, isLoading } = useSWR('/api/solvers', getJSON, { refreshInterval: 5000 });
+  const { data, error, isLoading } = useSWR<any>('/api/solvers', getJSON, { refreshInterval: 5000 });
 
   return (
     <main className="space-y-4">

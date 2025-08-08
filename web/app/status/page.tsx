@@ -8,7 +8,7 @@ async function getJSON<T>(path: string): Promise<T> {
 }
 
 export default function StatusPage() {
-  const { data } = useSWR('/api/status', getJSON, { refreshInterval: 5000 });
+  const { data } = useSWR<any>('/api/status', getJSON, { refreshInterval: 5000 });
   return (
     <main className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
